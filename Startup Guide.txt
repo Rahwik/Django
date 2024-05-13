@@ -1,0 +1,261 @@
+<----------Django-------------->
+
+1. Set-Up:
+
+   a.install python in the system
+   b.make a local folder in the disk (eg. Django)
+   c.open the folder in the command prompt by typinh cmd in the address bar
+   d.install virtual enviroment in the folder.(pip install virtualenv)
+   e.Activate the virtual enviroment by navigating to scipts.
+   f. cd env
+   g. cd scripts
+   h. activate
+   i.Navigate back to main folder.
+   j. cd ..
+   k.install Django in the virtual enviroment(pip install Django)
+   l.check if successfully installed.
+   m. write in the command palate. (python)
+   n.import django
+     django.__version__
+   o.to exit press(ctrl + Z )
+   
+
+2. Project Creation In Django:
+
+   a.django-admin startproject |core|.(core is variable)
+   b. navigate to the project folder.
+      cd core
+   c.open vs code to view the project.
+     code .
+
+3. APP Creation In Django:
+
+   a. app creation command.
+      python manage.py startapp |home|.(home is a variable)
+
+4. Run the Server:
+
+   a.python manage.py runserver
+   a.1. To exit the server in the command prompt enter (CTRL + C)
+   b.customs port execution command.
+     python manage.py runserver 0.0.0.0:5000
+
+NOTE: Always add apps in the main directory  in the settings.py in the "INSTALLED_APPS" or 
+      
+      INSTALLED_APPS = [ all the pre installed apps ]
+      EXTERNAL_APPS = [ apps we created ]
+      INSTALLE_APPS += EXTERNAL_APPS
+
+5. Views and URLs:
+   
+   A. Httpresponse:(from the apps)
+      a. Open the views.py in the ap created to add the attributes .
+      b. import httpresponse from django.http .
+         from django.http import HttpResponse
+      c. create functions to add the tags of html to display content .
+         def home(request):
+           return HttpResponse("<h1>hey this is a django server</h1>")
+      d. In the main directory open the urls.py to add the path of the view just created.
+      e. import the views from app in the urls.py
+         from home.views import *
+      f.Add the path of the function which is created in the urls.py.
+        a.  path('',home,name="home"),
+        b.  path('success_page/',success_page,name="success_page"),
+        NOTE: don't forget the comma at the last .
+   B. HTML response:(from the apps)
+      a. create a templates folder in the apps folder (eg. core/home/templates)
+      b. create index.html in the templates folder previously created.
+      c. create a render function for thr index. html
+         def home(request):
+             return render(request, "index.html")
+      d. if more than one folder is inside the templates folder then we need to add the     proper path of the HTML file
+       def home(request):
+             return render(request, "Assets/index.html")
+
+6. Template Engine:
+   
+   A. Dynamic  Data Manipulation:
+      a. Passing A List:
+         1. Create a List of dictionary within the views.py and write within the function.
+            peoples =[ {'name':'Rahul Prasad','age':21},   
+                       {'name':'Rahul Prasad','age':21},
+                       {'name':'Rahul Prasad','age':21}  ]
+         2. Declare the new list in the return render in the views.py
+            return render(request,"home/index.html",context={'people' : peoples})
+         3. Ways to add the Dynamic data to the index.html
+            a.Simply displaying the data
+              {{peoples}}
+            b.Dynamically adding the data using the tables in the html
+               <table>
+               <tr>
+               <th>S.no</th>
+               <th>Name</th>
+               <th>Age</th>
+               </tr>
+               {% for people in peoples %}
+               <tr>
+               <td>{{foorloop.counter}}</td>
+               <td>{{people.name}}</td>
+               <td>{{people.age}}</td>
+               </tr>
+               {% endfor %} 
+               <!-- Add more rows as needed -->
+               </table>
+            c.Using Dynamic Data for Other Operations:(if........else)
+               <table>
+               <tr>
+               <th>S.no</th>
+               <th>Name</th>
+               <th>Age</th>
+               <th>Can vote</th>
+               </tr>
+               {% for people in peoples %}
+               <tr>
+               <td>{{ forloop.counter }}</td>
+               <td>{{ people.name }}</td>
+               <td>{{ people.age }}</td>
+               <td {% if people.age >= 18 %} style="background:green;color:white;" {% else %} style="background:red;color:white;" {% endif %}>
+                {% if people.age >= 18 %}
+                 👍
+                {% else %}
+                 👎
+                {% endif %}
+              </td>
+              </tr>
+              {% endfor %}
+              </table>
+              
+   B. Ststic Data Manipulation:
+      a. Passing a Text String:
+         1. Create a Text in the views.py
+            eg. text= """ Rahul embodies a rare blend of resilience and empathy that leaves a lasting impression on everyone he meets. His unwavering determination and tireless work ethic are matched only by his genuine kindness and compassion towards others."""
+         2. Calling the text in the index.html 
+            {{text}}
+
+         3. Truncatechars:  filter truncate the value if it is longer than the specified number of characters
+            {{ text|truncatechars:80}}
+       b. Working on the data and using it: 
+          1. Create a list in the views.py
+             Vegetables =[ "pumpkin","tomato","potato"]
+          2. Add the new list to retrn render
+              return render(request,"home/index.html",context={'people' : peoples,'vegetables':vegetables})
+          3. Use the data in the index.html for data usage:
+             <p>
+             {% if "cucumber" in vegetables %}
+             yes avaiable
+             {% elif "tomato" in vegetables %}
+             yes avaiable
+             {% endid %}
+             </p>
+
+   C. Naviagting to different pages:
+      a. Create different html files in the templates.
+         eg. about.html , contact.html
+      b. Add diferent functions to the views.py for thr newly created html files.
+         def about(request):
+             return render(request, "about.html")
+         def contact(request):
+             return render(request, "contact.html")
+      c. Add the new functions in the urls to integrate them together in the urls.py of urlpatterns.
+         urlspatterns =[
+                        path('',home,name="home"),
+                        path('about/',about,name="about"),
+                        path('contact/',contact,name="contact"),
+                       ]
+      d. Add the different pages to the html file.
+         <a href="/contact/">
+            contact
+         |
+         <a href="/About/">
+            About 
+      e. Do similarly to all the html to make them inter linked
+
+   D. Elimate the repeated code: 
+      a. Create a base.html to add all the comman attributes .  
+      b. add the repeated attributes to the base.html
+      c. the part which you don't want ot repeat add the follwing part
+         {% block start %}
+         {% endblock %}
+      d. change the html files accordingly, write the unquie code in the block:
+         {% extends "base.html" %}
+         {% block start %}
+          //Write your code here
+         {% endblock %}
+   E. Display name of the page at the top:
+      a. Add the context in each page attributes.
+         def about(request):
+             context={'page':'About'}
+             return render(request, "about.html",context)
+         def contact(request):
+             context={'page':'Contact'}
+             return render(request, "contact.html",context)
+      b. Return the new dunctions value in te return render.
+         return render(request,"home/index.html",context={'page':'context','people' : peoples})
+      c. add the returned file to the base.html
+         <title>{{page}}</title>
+
+7.Models and Migration:
+   *Models in Django are Python classes that define the structure and behavior of your data.
+   *Migrations are a way to propagate changes you make to your models (such as adding new fields or altering existing ones) into your database schema.
+
+   A. How to create models in Django
+      1. Open the app[home,account,any other app] that we have created and naviagte to models.py 
+      2. Create a class and call the library model in the class.
+         class Student(models.Model):
+      3. Within the class define various fileds as the attributes of the class created.
+         name = models.Charfiled(max_length=100)
+         age = models.IntegerField()
+         email = models.Emailfiled()
+         address = models.TextField()
+         image = models.ImageField()
+         file = models.FilesFiled()
+      4. Similarly we can create other classes in the models.py and add attributes in them.
+         class Result(mpdels.Model):
+             pass
+NOTE: sg Django use DBSqlite we need to install it in our system to see the different schema we created in out DataBase.
+   
+   B. How to use and the models and thier properties
+      1. All the changes and the migration files are stored in the dependencies of the 0001_intial.py and similarlies in the other dependdencies as we go on making chances .
+      2. we can then make migration in the terminal and add them to the database.
+         python manage.py makemigrations
+      3. We can check all the models in the terminal and if they are working properly or not.
+         python manage.py migrate
+
+8. Advances CRUD Operations :
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+   

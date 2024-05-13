@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block start %}
+
+
+<div class="container">
+    <h1>Django Server Description</h1>
+    <div class="highlight">
+        <p>Django is a high-level Python web framework that encourages rapid development and clean, pragmatic
+            design. It
+            is used for building web applications.</p>
+    </div>
+    <p>This HTML webpage is designed to provide a brief description of a Django server.</p>
+    <table>
+        <tr>
+            <th>S.no</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Can vote</th>
+        </tr>
+        {% for people in peoples %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ people.name }}</td>
+            <td>{{ people.age }}</td>
+            <td {% if people.age >= 18 %} style="background:green;color:white;" {% else %}
+                style="background:red;color:white;" {% endif %}>
+                {% if people.age >= 18 %}
+                👍
+                {% else %}
+                👎
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <!-- Add more rows as needed -->
+
+    <div class="note">
+        <p>Note: This is a simple example and does not cover all aspects of Django. Consult official documentation
+            for
+            comprehensive information.</p>
+    </div>
+</div>
+{{ vegetables }}
+<p>
+    {% if "cucumber" in vegetables %}
+    yes available
+    {% elif "tomato" in vegetables %}
+    yes available
+    {% endif %}
+</p>
+<a href="/contact/">
+    contact
+    |
+    <a href="/about/">
+        about
+
+
+        {% endblock %}
